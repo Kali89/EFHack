@@ -5,10 +5,8 @@ import manual_tfidf
 def what_words_am_i_missing(cv, job_ids):
     job_descriptions = get_docs_by_job_id(job_ids)
     important_words_freqs = manual_tfidf.new_run_tfidf(job_descriptions)
-    important_words = [word for (word, freq) in important_words_freqs]
-    for word in important_words:
-        if word not in cv:
-            print word
+    important_words = [(word, freq) for (word, freq) in important_words_freqs if word not in cv]
+    print important_words
 
 def get_docs_by_job_id(job_ids):
     with open('user_password.txt') as f:
