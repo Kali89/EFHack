@@ -22,7 +22,7 @@ def is_valid_file(parser, arg):
 def run_query(sql_statement):
     with open('user_password.txt') as f:
         username, password = f.readline().strip().split(':')
-    con = mdb.connect('localhost', username, password, 'test');
+    con = mdb.connect('10.100.95.207', username, password, 'test');
     with con:
         cur = con.cursor()
         cur.execute(sql_statement)
