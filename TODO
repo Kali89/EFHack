@@ -1,0 +1,23 @@
+Overall plan
+
+Input field where user submits a CV - CV is split into text and analysed (nltk). This is compared against some jobs database and jobs are suggested based on the candidates CV.
+
+Next level
+
+Web interface, user submits CV via upload (has profile e.t.c.). Again, CV split up and analysed - compared to current job market and jobs are suggested. They can input certain bits of information (required salary, location) and this will narrow their search results down. If we can't find anything (or in another section) we can suggest skills they might want to learn/experience they might want to gain to get jobs they currently can't.
+
+
+### Post OS reinstall
+
+Recreate job table, create jobuser and run the script I'm about to write.
+
+### Post EF
+
+Tidy up the scraping process (handle small inputs and encoded characters in a 'non-sledgehammer' kind of way)
+Strip out punctuation - move to a 'stream of words'
+Strip out recruiter information, 'Not found' and similar from the job adverts
+Strip out personal information (name e.t.c.) from the CV - try to reduce to 'list of skills'
+Investigate an 'updating' tfidf-like method
+
+### For EF task
+Allow user to click on one of the x jobs to say that's the best match. When they do - take that description and the 4 most similar jobs, treat those as one document and find the y most relevant words (using manual tf_idf) - compare these to the user's CV and suggest words that they're missing

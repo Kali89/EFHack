@@ -1,0 +1,83 @@
+﻿MATTHEW SHARPE
+15A County Road
+Stafford,
+Staffordshire,										07732885524
+ST16 2PU								matthewsharpe3@gmail.com	
+SUMMARY
+
+Masters degree educated data scientist with a history of academic and career success. Experience of working in an emerging data science department – choosing and implementing new technologies and methodologies. Enthused by the chance to continue working in a data science role with cutting edge technologies and the brightest people around.
+
+PROFESSIONAL EXPERIENCE
+
+THE hut group
+June 2012 - Present
+Data Scientist
+	
+Generating insight as part of the newly formed Growth and Innovation team. Responsible for using bleeding edge technologies with big data to suggest and implement business change.
+
+Generated upwards of £500k revenue/year building an in-house recommendations service, testing a variety of machine learning algorithms to show the best products in the right places.
+Set up the company's first Hadoop Cluster and used this to run AB tests and perform statistical analysis.
+Implemented an automated 'browse-abandon' email system responsible for £16k revenue/month.
+Built a real time, interactive reporting solution based on 8GB daily log files.
+Deployed code to 27 major websites with close to 500,000 viewers a day.
+
+Technical Marketplace Manager                                                     	
+
+Managing the technical side of all the businesses marketplace offerings (eBay, GroupOn) and the whole business (technical and commercial) offering with Amazon and Play.
+
+Built and maintained automated pricing solutions for both Amazon and Play, generating upwards of £5,000/day revenue, increasing profitability and allowing better management of aging stock.
+
+
+MARS PETCARE UK
+September 2011 – June 2012 
+Management Development Program
+                                          
+
+Managing projects to improve the efficiency and reduce the waste of a large manufacturing operation line.
+
+Led a group of 6 employees to deliver £80,000 worth of annualized savings through a project to reduce the quantity of unlogged waste in the factory.
+
+
+ADDLESHAW GODDARD LLP, COBBETTS LLP, BRISTOWS LLP, DELOITTE LLP
+
+June 2009 – June 2011
+Vacation Scheme Placements
+
+
+Completing small parts of larger legal projects and discovering aspects of legal work through case studies. Attending training courses on interviewing, drafting and writing in a technical but understandable way. Interviewing clients at their own site, completing tax calculations and delivering presentations on complex areas of tax regulation to senior partners.
+
+SELF EMPLOYED
+2005 – 2007 
+Guitar teacher
+
+
+Marketing myself effectively to attract students, preparing and delivering lessons in an engaging fashion and managing a client base of up to 10 students.
+
+SKILLS
+Python
+Databases (SQL Server, MySQL, Cassandra, Mongo, Redis)
+Machine Learning
+Linux
+Statistical Testing
+Hadoop, HDFS and MapReduce
+Web technologies (Javascript, jQuery, HTML)
+Microsoft (Applications, some VB)
+Version control (Subversion, Git)
+Programming Languages (Matlab/Octave, Java)
+
+EDUCATION
+
+Durham University - Master of Natural Sciences (Mathematics & Physics) – 2:1
+
+Completed a project in Python creating a simulation of the evolution of life (Conway's Game of Life) with both closed and repeating boundary conditions.
+  Programmed extensively in Matlab in order to numerically solve third order partial differential equations with varying boundary conditions.
+
+St Mary's High School – A levels (Mathematics, Physics, Chemistry, History) – 4 As
+
+Tupton Hall School – GCSEs – 6 A*s, 3 As, 1 B
+
+INTERESTS
+
+I am a keen sportsman, gaining certification in sports coaching and have participated at a county level for squash.
+
+I also keep up my interest in guitar and music in general and have, and continue to, play in a number of bands of varying standard.

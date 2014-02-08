@@ -1,0 +1,141 @@
+$def with (form, text)
+
+<!doctype html>
+
+<html>
+<head>
+<title>Smart CV Handling</title>
+<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/redmond/jquery-ui.css" type="text/css" rel="Stylesheet" />
+<link href="static/dist/css/bootstrap.css" rel="stylesheet">
+<link href="static/starter-template.css" rel="stylesheet">
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.min.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script type="text/javascript">
+var input_string;
+jQuery(document).ready(function() {
+    jQuery('.col-lg-4').hide();
+    jQuery(".button").click(function() {
+        input_string = $$("textarea#textfield").val();
+        jQuery('.col-lg-4').show();
+        jQuery.ajax({
+            type: "POST",
+            data: {textfield : input_string},
+            dataType: 'json',
+            success: function(data) {
+                var keys = [];
+                for(var k in data) keys.push(k);
+                jQuery('.form').hide().fadeOut(1000);
+                jQuery('.fadein1>h2').html(keys[0]).hide().fadeIn(1500);
+                jQuery('.fadein1>p').html(data[keys[0]]).hide();
+                jQuery('.fadein2>h2').html(keys[1]).hide().fadeIn(1500);
+                jQuery('.fadein2>p').html(data[keys[1]]).hide();
+                jQuery('.fadein3>h2').html(keys[2]).hide().fadeIn(1500);
+                jQuery('.fadein3>p').html(data[keys[2]]).hide();
+                jQuery('.fadein4>h2').html(keys[3]).hide().fadeIn(1500);
+                jQuery('.fadein4>p').html(data[keys[3]]).hide();
+                jQuery('.fadein5>h2').html(keys[4]).hide().fadeIn(1500);
+                jQuery('.fadein5>p').html(data[keys[4]]).hide();
+                jQuery('.fadein6>h2').html(keys[5]).hide().fadeIn(1500);
+                jQuery('.fadein6>p').html(data[keys[5]]).hide();
+            },
+        });
+        return false;
+    });
+});
+</script>
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">Job Hunt</a>
+            </div>
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">Home</a></li>
+                    <li><a href="../about">About</a></li>
+                    <li><a href="../contact">Contact</a></li>
+                </ul>
+            </div><!--/.nav-collapse -->
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row row-offcanvas row-offcanvas-right">
+            <div class="col-xs-12 col-sm-9">
+                <p class="pull-right visible-xs">
+                    <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Toggle Nav</button>
+                </p>
+                <div class="jumbotron">
+                    <h3>Find the jobs that suit you - fast!</h3> 
+                    <form class="form" method="post">
+                        $:form.render()
+                    <input class="button" type="submit" value="send" />
+                    </form>
+                </div>
+                <div class="row">
+                    <div class="col-6 col-sm-6 col-lg-4 fadein1">
+                        <h2></h2>
+                        <p></p>
+                    </div><!--/span-->
+                    <div class="col-6 col-sm-6 col-lg-4 fadein2">
+                        <h2></h2>
+                        <p></p>
+                    </div><!--/span-->
+                    <div class="col-6 col-sm-6 col-lg-4 fadein3">
+                        <h2></h2>
+                        <p></p>
+                    </div><!--/span-->
+                    <div class="col-6 col-sm-6 col-lg-4 fadein4">
+                        <h2></h2>
+                        <p></p>
+                    </div><!--/span-->
+                    <div class="col-6 col-sm-6 col-lg-4 fadein5">
+                        <h2></h2>
+                        <p></p>
+                    </div><!--/span-->
+                    <div class="col-6 col-sm-6 col-lg-4 fadein6">
+                        <h2></h2>
+                        <p></p>
+                    </div><!--/span-->
+                </div><!--/row-->
+            </div><!--/span-->
+
+            <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
+                <!--                <div class="list-group"> -->
+<!--                    <a href="#" class="list-group-item active">Link</a> -->
+<!--                    <a href="#" class="list-group-item">Link</a> -->
+<!--                    <a href="#" class="list-group-item">Link</a> -->
+<!--                    <a href="#" class="list-group-item">Link</a> -->
+<!--                    <a href="#" class="list-group-item">Link</a> -->
+<!--                    <a href="#" class="list-group-item">Link</a> -->
+<!--                    <a href="#" class="list-group-item">Link</a> -->
+<!--                    <a href="#" class="list-group-item">Link</a> -->
+<!--                    <a href="#" class="list-group-item">Link</a> -->
+<!--                    <a href="#" class="list-group-item">Link</a> -->
+<!--                </div> -->
+            </div><!--/span-->
+        </div><!--/row-->
+
+        <hr>
+
+        <footer>
+            <p>&copy; Smart CV Handling</p>
+        </footer>
+
+    </div><!--/.container-->
+
+    <span id="foo">$text</span>
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="static/dist/js/bootstrap.min.js"></script>
+</body>
+</html>
+
