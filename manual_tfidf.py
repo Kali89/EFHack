@@ -2,6 +2,7 @@
 from __future__ import division, unicode_literals
 import math
 from text.blob import TextBlob as tb
+import MySQLdb as mdb
 
 word_dictionary = {}
 wordy_dictionary = {}
@@ -40,7 +41,7 @@ def new_tf(word,index, useful_dictionary):
         count = 0
     word_count = useful_dictionary[index]['count']
     return float(count)/word_count
-    
+
 def populate_containing_dictionary(documentlist):
     """
     For IDF
