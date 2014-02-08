@@ -21,3 +21,5 @@ Investigate an 'updating' tfidf-like method
 
 ### For EF task
 Allow user to click on one of the x jobs to say that's the best match. When they do - take that description and the 4 most similar jobs, treat those as one document and find the y most relevant words (using manual tf_idf) - compare these to the user's CV and suggest words that they're missing
+
+http://583c7b36.ngrok.com 
