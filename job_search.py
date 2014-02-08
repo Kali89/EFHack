@@ -172,7 +172,7 @@ class open_and_parse_job_websites(object):
         ## Marked for tidying
         with open('user_password.txt') as f:
             username, password = f.readline().strip().split(':')
-        con = mdb.connect('localhost', user, password, 'test', charset='utf8', use_unicode=True);
+        con = mdb.connect('10.100.95.207', test', charset='utf8', use_unicode=True);
         with con:
             cur = con.cursor()
             cur.execute('SET NAMES utf8;')

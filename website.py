@@ -19,14 +19,16 @@ app = web.application(urls, globals())
 
 my_form = web.form.Form(web.form.Textarea('content', class_='textfield', id='textfield', rows=20, columns=60, description='Post your CV in here:'),)
 
-jobs_dictionary = dict((line[0], line[1].strip().replace('\n', ' ')) for line in cv_comparer.run_query('SELECT search_id, job_description FROM test.job_results') if len(line[1].strip().replace('\n', ' ').split(' ')) > 15)
+
+jobs_dictionary = dict((line[0], line[1].strip().replace('\n', ' ')) for line in cv_comparer.run_query('SELECT search_id, job_description FROM test.job_results'))
 i = 0
 index_dictionary = {}
-for line in cv_comparer.run_query('SELECT search_id, job_description from test.job_results'):
-    if len(line[1].strip().replace('\n', ' ').split(' ')) > 15:
+for key in jobs_dictionary.keys():
+    if len(jobs_dictionary[key].strip().replace('\n', ' ').split(' ')) > 15:
         i += 1
-        index_dictionary[i] = line[0]
+        index_dictionary[i] = key
     else:
+        del jobs_dictionary[key]
         index_dictionary[i] = False
 
 #similarity_matrix = make_similarity_matrix(all_jobs_dictionary)

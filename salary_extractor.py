@@ -20,7 +20,7 @@ args = parser.parse_args()
 ## Get all the jobs out of the database
 with open('user_password.txt') as f:
     username, password = f.readline().strip().split(':')
-con = mdb.connect('localhost', username, password, 'test');
+con = mdb.connect('10.100.95.207', username, password, 'test');
 with con:
     cur = con.cursor()
     all_descriptions_sql = "SELECT job_title, job_description from test.job_results where search_id = " + str(args.search_id)
