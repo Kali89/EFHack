@@ -5,48 +5,28 @@ Using a linkedin api already written.  See above linkedin
 install is via pip: sudo pip install python-linkedin
 
 """
-from linkedin import linkedin, server
-import BaseHTTPServer
-import cgi
-
+from linkedin import linkedin
 
 class LinkedInHandler:
 
     def __init__(self):
-        self.API_KEY = '77o0i7g6tnd1eb'
-        self.API_SECRET = 'zYgn5AyIo7EL1UOz'
+        self.CONSUMER_KEY = '77o0i7g6tnd1eb'
+        self.CONSUMER_SECRET = 'zYgn5AyIo7EL1UOz'
+        self.USER_TOKEN = 'a18ee3a3-4363-4c77-9d68-ba9161a0e197'
+        self.USER_SECRET = '46a8553c-c694-4943-809e-e22f75fbb189'
         self.RETURN_URL = 'http://localhost:8000'
 
     def request_authentication(self):
-        authentication = linkedin.LinkedInAuthentication(self.API_KEY, self.API_SECRET, self.RETURN_URL, ['r_fullprofile'])
-        print authentication.authorization_url  # open this url on your browser
+        authentication = linkedin.LinkedInDeveloperAuthentication(self.CONSUMER_KEY, self.CONSUMER_SECRET, self.USER_TOKEN, self.USER_SECRET, self.RETURN_URL, ['r_fullprofile'])
         application = linkedin.LinkedInApplication(authentication)
-        self._wait_for_user_to_enter_browser(application)
-        print application
-        print application.get_profile()
+        return application
 
-    def _wait_for_user_to_enter_browser(self, app):
-        """
-        This seems like a super hacky way of doing stuff.
-        Probably going to have to stay as we're not going to be running on a
-        web server.
-        """
-        class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
-            def do_GET(self):
-                p = self.path.split('?')
-                if len(p) > 1:
-                    params = cgi.parse_qs(p[1], True, True)
-                    app.authentication.authorization_code = params['code'][0]
-                    print app.authentication.authorization_code
-                    app.authentication.get_access_token()
-                    print app.authentication.get_access_token()
-
-        server_address = ('', 8000)
-        httpd = BaseHTTPServer.HTTPServer(server_address, MyHandler)
-        httpd.handle_request()
-
+    def get_information(self, user):
+        interesting_fields = ['first-name', 'last-name', 'location', 'interests', 'languages', 'skills', 'educations','three_current_positions', 'three_past_positions', 'recommendations-received']
+        return user.get_profile(selectors=interesting_fields)
 
 if __name__ == "__main__":
     li = LinkedInHandler()
-    li.request_authentication()
-
+    user_profile = li.request_authentication()
+    info_dict = li.get_information(user_profile).items()
+    print info_dict
