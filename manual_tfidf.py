@@ -76,14 +76,16 @@ def run_tfidf(document_list):
         for word, score in sorted_words[:5]:
             print "Word: %s, TF-IDF: %s" % (str(word), str(score))
 
-
 def new_run_tfidf(document_list):
     documentlist = [tb(document) for document in document_list]
     document_dictionary = populate_document_dictionary(documentlist)
     idf_dictionary = populate_containing_dictionary(documentlist)
+    important_word_freqs = []
     for i, document in enumerate(documentlist):
         print "Top words in document %s" % str(int(i) + 1)
         scores = dict((word, new_tfidf(word,int(i),document_dictionary,idf_dictionary, documentlist)) for word in document.split(' '))
         sorted_words = sorted(scores.items(), key=lambda x: x[1], reverse=True)
         for word, score in sorted_words[:5]:
             print "Word: %s, TF-IDF: %s" % (str(word), str(score))
+        important_word_freqs.extend(sorted_words[:5])
+    return important_word_freqs
