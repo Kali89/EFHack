@@ -20,8 +20,13 @@ class LinkedInHandler():
 
     def get_user(self):
         auth_code = self.request_authentication()
+        if auth_code.code is None:
+            return None
         access_token = self.request_access_token(auth_code)
+        if access_token is None:
+            return None
         return self.get_profile(access_token)
+
 
     def build_request_string(self):
         return "https://www.linkedin.com/uas/oauth2/authorization?response_type=code&client_id=" + self.KEY + "&scope=r_fullprofile&state=1UXrL4PbYPVtYyowFAez&redirect_uri="+self.RETURN_URL
@@ -38,13 +43,19 @@ class LinkedInHandler():
         #url = "https://api.linkedin.com/v1/people/~:(skills)"
         payload = {'oauth2_access_token':access_token}
         r = requests.get(url, params=payload)
-        return json.loads(r.text.encode('utf-8'))
+        try:
+            return json.loads(r.text.encode('utf-8'))
+        except:
+            return None
 
     def request_access_token(self, auth_code):
         url = "https://www.linkedin.com/uas/oauth2/accessToken?grant_type=authorization_code"
         payload = {'code':auth_code.code, 'redirect_uri':self.RETURN_URL, 'client_id':self.KEY, 'client_secret':self.SECRET}
         r = requests.post(url, params=payload)
-        return json.loads(r.text)['access_token']
+        try:
+            return json.loads(r.text)['access_token']
+        except:
+            return None
 
     def _wait_for_user_to_enter_browser(self, auth_code):
         class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
@@ -52,7 +63,10 @@ class LinkedInHandler():
                 p = self.path.split('?')
                 if len(p) > 1:
                     params = cgi.parse_qs(p[1], True, True)
-                    auth_code.set_token(params['code'][0])
+                    try:
+                        auth_code.set_token(params['code'][0])
+                    except:
+                        print "User does not want"
 
         server_address = ('', 8000)
         httpd = BaseHTTPServer.HTTPServer(server_address, MyHandler)
