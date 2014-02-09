@@ -33,6 +33,9 @@ class jobSearch(object):
         # self.tf_dictionary = populate_document_dictionary(self.job_description_list) # is this needed anywhere?
         self.df_dictionary = manual_tfidf.populate_containing_dictionary(self.job_description_list)
         self.doc_weights = cv_comparer.populate_doc_weights(self.job_description_list, self.df_dictionary, len(self.job_description_list)) #list of weights, same index as docList
+        self.readCVs('CVs/MiF_2014_data.pickle')
+        self.initCVs()
+
 
     def procText(self, desc):
       fDesc = re.sub(r'[^a-zA-Z0-9_\'-]+', ' ', desc.lower())
@@ -66,7 +69,6 @@ class jobSearch(object):
     def readCVs(self, path):
         with open(path, 'r') as f:
             self.bizExp, self.edu, self.job, self.company, self.name, self.email, self.phoneNumber, self.cvCount = pickle.load(f)
-        print map(type, (self.bizExp, self.edu, self.job, self.company, self.name, self.email, self.phoneNumber, self.cvCount))
         self.dispCV = []
         for i in range(len(self.bizExp)):
           self.dispCV.append([self.bizExp[i], self.edu[i], [], [], [], [], []])
@@ -85,6 +87,13 @@ class jobSearch(object):
           for (k,v) in self.phoneNumber.items():
             if i in v:
               self.dispCV[i][6].append(k)
+
+    def cv_returner(self, cv_id):
+        cv_dictionary = {}
+        bizExp, edu, job, company, name, email, phoneNumber = self.dispCV[cv_id]
+        cv_dictionary[cv_id] = {'business_experience' : bizExp, 'education' : edu, 'job' : ' '.join([job_entry for job_entry in job]), 'company' : ' '.join([company_instance for company_instance in company]), 'name' : ' '.join([name_instance for name_instance in name]), 'email' : ' '.join([email_instance for email_instance in email]), 'phone' : ' '.join([phone_instance for phone_instance in phoneNumber])}
+        return cv_dictionary
+        
 
     def initCVs(self, read = None):
         if not read:
@@ -108,7 +117,7 @@ class jobSearch(object):
     def getRelCVs(self, query):
       query = query.lower()
       inds = list(self.parseSearch(query, [self.job, self.company]))
-      return [self.bizExp[i] for i in inds]
+      return inds
 
     def searchWord(self, word, dicts):
         inds = set([])
@@ -166,10 +175,12 @@ if __name__ == "__main__":
   """
   j = jobSearch()
   j.readCVs('CVs/MiF_2014_data.pickle')
-  print j.dispCV
+  j.initCVs()
+#  print j.cv_returner(3)
+#  print j.dispCV
   #print j.job
   #print j.company
-  j.initCVs()
+
   print j.getImpWords("trader",50)
   #print j.getRelCVs("trader")
 #  cv_as_string = j.get_pdf_as_text('MattGaming.pdf')
