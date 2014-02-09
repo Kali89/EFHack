@@ -55,9 +55,14 @@ class jobSearch(object):
         return json.dumps(self.job_dictionary.get(job_id, None), ensure_ascii=False)
 
     def return_missing_words(self, cv, job_list):
+        """
+        CV is just a string.  job list is a list of ids.
+        """
         jobs_descriptions = []
+        #List of strings, once per document.
         for job_id in job_list:
           jobs_descriptions.append(self.get_job_info(job_id)['job_description'])
+        #Uses this tfidf stuff to get a list of important words
         important_word_freqs = manual_tfidf.run_tfidf(jobs_descriptions)
         important_words = [(word, freq) for (word, freq) in important_word_freqs if word not in cv]
         return important_words
