@@ -4,6 +4,7 @@ import manual_tfidf
 import cv_comparer
 import pdfPathToText
 import json
+import pickle
 #from manual_tfidf import populate_document_dictionary, populate_containing_dictionary
 #from cv_comparer import run_query, populate_doc_weights, best_matches_fast, getVector
 #from pdfPathToText import convert_pdf_to_txt
@@ -45,16 +46,17 @@ class jobSearch(object):
     def get_pdf_as_text(self, path_to_pdf):
         return pdfPathToText.convert_pdf_to_txt(path_to_pdf)
     
-    def readCVs(self):
-      return []
+    def readCVs(self, path):
+        with open(path, 'r') as f:
+            self.bizExp, self.edu, self.job, self.company, self.name, self.email, self.phoneNumber, self.cvCount = pickle.load(f)
 
     def initCVs(self, read = None):
-      if read == None:
-        self.cvList = self.readCVs()
-      else:
-        self.cvList = [self.procText(r) for r in read]
-      self.cvDfs = manual_tfidf.populate_containing_dictionary(self.cvList)
-      self.cvWeights = cv_comparer.populate_doc_weights(self.cvList, self.cvDfs, len(self.cvList))
+        if not read:
+            cvList = [self.procText(self.bizExp[cv_index] + " " + self.edu[cv_index]) for cv_index in range(len(self.bizExp))]
+        else:
+            cvList = [self.procText(r) for r in read]
+        self.cvDfs = manual_tfidf.populate_containing_dictionary(cvList)
+        self.cvWeights = cv_comparer.populate_doc_weights(cvList, self.cvDfs, len(cvList))
 
     def getBlob(self, inds):
       return concat([self.cvList[i] for i in inds])
@@ -68,21 +70,21 @@ class jobSearch(object):
     def searchWord(self, word, dicts):
         inds = set([])
         for d in dicts:
-        for (k,v) in d.items():
-          if word in k.split():
-            inds = inds.union(set(v))
+            for (k,v) in d.items():
+                if word in k.split():
+                    inds = inds.union(set(v))
         return inds
 
     def parseSearch(self, query, dicts):
       if '&' in query:
         (f,s) = query.split('&',1)
         inds = self.parseSearch(f, dicts)
-        inds = inds.intersection(parseSearch(s,dicts))
+        inds = inds.intersection(self.parseSearch(s,dicts))
         return inds
       elif ' ' in query:
         (f,s) = query.split(' ',1)
         inds = self.parseSearch(f, dicts)
-        inds = inds.union(parseSearch(s,dicts))
+        inds = inds.union(self.parseSearch(s,dicts))
         return inds
       else:
         return self.searchWord(query, dicts)
@@ -121,10 +123,13 @@ if __name__ == "__main__":
   print inds
   print x.getImpWords(inds, 50)
   """
-#  j = jobSearch()
+  j = jobSearch()
+  j.readCVs('CVs/MiF_2014_data.pickle')
+  j.initCVs()
+  print j.cvWeights[0:10]
 #  cv_as_string = j.get_pdf_as_text('MattGaming.pdf')
 #  for job_id in j.get_related_jobs(cv_as_string):
 #      json_job_information = j.get_json_job_info(job_id)
 #      print json_job_information
-  dicts = [{'abra cada bra':[1,2,3,4,5], 'qui':[3,7,9,10], 'pui':[3,4,5,6,7]},{'lui':[2,3,4,9],'cui':[1,8,5,10]}]
-  print parseSearch("qui & pui",dicts)
+#  dicts = [{'abra cada bra':[1,2,3,4,5], 'qui':[3,7,9,10], 'pui':[3,4,5,6,7]},{'lui':[2,3,4,9],'cui':[1,8,5,10]}]
+#  print j.parseSearch("qui & pui",dicts)
