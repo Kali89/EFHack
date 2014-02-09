@@ -24,7 +24,7 @@ class jobSearch(object):
 
     def get_all_job_info(self):
         sql_query = "SELECT * FROM test.job_results"
-        return dict((job_id, {'search_term' : search.decode('utf-8', 'ignore'), 'location_term' : location.decode('utf-8', 'ignore'), 'job_title' : title.decode('utf-8', 'ignore'), 'job_description' : description.decode('utf-8', 'ignore')}) for (job_id, search, location, title, description) in cv_comparer.run_query(sql_query))
+        return dict((job_id, {'job_id', job_id, 'search_term' : search.decode('utf-8', 'ignore'), 'location_term' : location.decode('utf-8', 'ignore'), 'job_title' : title.decode('utf-8', 'ignore'), 'job_description' : description.decode('utf-8', 'ignore')}) for (job_id, search, location, title, description) in cv_comparer.run_query(sql_query))
 
     def get_job_info(self, job_id):
         return self.job_dictionary.get(job_id, None)
@@ -135,8 +135,8 @@ if __name__ == "__main__":
   """
   j = jobSearch()
   cv_as_string = j.get_pdf_as_text('MattGaming.pdf')
-  for job_id in j.get_related_jobs(stringy):
+  for job_id in j.get_related_jobs(cv_as_string):
       json_job_information = j.get_json_job_info(job_id)
       print json_job_information
 #  dicts = [{'abra cada bra':[1,2,3,4,5], 'qui':[3,7,9,10], 'pui':[3,4,5,6,7]},{'lui':[2,3,4,9],'cui':[1,8,5,10]}]
-#  print parseSearch("qui",dicts)
+#  print parseSearch("qui & pui",dicts)
