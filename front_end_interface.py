@@ -26,6 +26,7 @@ def get_job_by_id(jid):
 class jobSearch(object):
 
     def __init__(self):
+        return
         self.job_dictionary = self.get_all_job_info()
         self.job_description_list = [self.procText(self.job_dictionary[entry]['job_description']) for entry in self.job_dictionary.keys()]
 
@@ -65,29 +66,55 @@ class jobSearch(object):
     def readCVs(self, path):
         with open(path, 'r') as f:
             self.bizExp, self.edu, self.job, self.company, self.name, self.email, self.phoneNumber, self.cvCount = pickle.load(f)
+        print map(type, (self.bizExp, self.edu, self.job, self.company, self.name, self.email, self.phoneNumber, self.cvCount))
+        self.dispCV = []
+        for i in range(len(self.bizExp)):
+          self.dispCV.append([self.bizExp[i], self.edu[i], [], [], [], [], []])
+          for (k,v) in self.job.items():
+            if i in v:
+              self.dispCV[i][2].append(k)
+          for (k,v) in self.company.items():
+            if i in v:
+              self.dispCV[i][3].append(k)
+          for (k,v) in self.name.items():
+            if i in v:
+              self.dispCV[i][4].append(k)
+          for (k,v) in self.email.items():
+            if i == v:
+              self.dispCV[i][5].append(k)
+          for (k,v) in self.phoneNumber.items():
+            if i in v:
+              self.dispCV[i][6].append(k)
 
     def initCVs(self, read = None):
         if not read:
-            cvList = [self.procText(self.bizExp[cv_index] + " " + self.edu[cv_index]) for cv_index in range(len(self.bizExp))]
+            self.cvList = [self.procText(self.bizExp[cv_index] + " " + self.edu[cv_index]) for cv_index in range(len(self.bizExp))]
         else:
-            cvList = [self.procText(r) for r in read]
-        self.cvDfs = manual_tfidf.populate_containing_dictionary(cvList)
-        self.cvWeights = cv_comparer.populate_doc_weights(cvList, self.cvDfs, len(cvList))
+            self.cvList = [self.procText(r) for r in read]
+        self.cvDfs = manual_tfidf.populate_containing_dictionary(self.cvList)
+        self.cvWeights = cv_comparer.populate_doc_weights(self.cvList, self.cvDfs, len(self.cvList))
 
     def getBlob(self, inds):
-      return concat([self.cvList[i] for i in inds])
+      return self.concat([self.cvList[i] for i in inds])
 
-    def getImpWords(self, inds, noWords):
+    def getImpWords(self, query, noWords):
+      query = query.lower()
+      inds = list(self.parseSearch(query, [self.job, self.company]))
       blob = self.getBlob(inds)
       vec = cv_comparer.getVector(blob, self.cvDfs, len(self.cvList), tp=None)
       #print sorted(vec.items(), key=lambda x: x[1], reverse=True)
       return map(lambda x:x[0], sorted(vec.items(), key=lambda x: x[1], reverse=True)[:noWords])
 
+    def getRelCVs(self, query):
+      query = query.lower()
+      inds = list(self.parseSearch(query, [self.job, self.company]))
+      return [self.bizExp[i] for i in inds]
+
     def searchWord(self, word, dicts):
         inds = set([])
         for d in dicts:
             for (k,v) in d.items():
-              if word in k.split():
+              if word in k.lower().split():
                 inds = inds.union(set(v))
             return inds
 
@@ -139,8 +166,12 @@ if __name__ == "__main__":
   """
   j = jobSearch()
   j.readCVs('CVs/MiF_2014_data.pickle')
+  print j.dispCV
+  #print j.job
+  #print j.company
   j.initCVs()
-  print j.cvWeights[0:10]
+  print j.getImpWords("trader",50)
+  #print j.getRelCVs("trader")
 #  cv_as_string = j.get_pdf_as_text('MattGaming.pdf')
 #  for job_id in j.get_related_jobs(cv_as_string):
 #      json_job_information = j.get_json_job_info(job_id)
