@@ -55,7 +55,7 @@ class jobSearch(object):
     def return_missing_words(self, cv, job_list):
         jobs_descriptions = []
         for job_id in job_list:
-          jobs_descriptions.append(self.get_job_info(job_id))
+          jobs_descriptions.append(self.get_job_info(job_id)['job_description'])
         important_word_freqs = manual_tfidf.run_tfidf(jobs_descriptions)
         important_words = [(word, freq) for (word, freq) in important_word_freqs if word not in cv]
         return important_words
@@ -101,7 +101,7 @@ class cvSearch(object):
         bizExp, edu, job, company, name, email, phoneNumber = self.dispCV[cv_id]
         cv_dictionary[cv_id] = {'business_experience' : bizExp, 'education' : edu, 'job' : ' '.join([job_entry for job_entry in job]), 'company' : ' '.join([company_instance for company_instance in company]), 'name' : ' '.join([name_instance for name_instance in name]), 'email' : ' '.join([email_instance for email_instance in email]), 'phone' : ' '.join([phone_instance for phone_instance in phoneNumber])}
         return cv_dictionary
-        
+
 
     def initCVs(self, read = None):
         if not read:

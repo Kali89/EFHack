@@ -44,7 +44,7 @@ class LinkedInHandler():
         payload = {'oauth2_access_token':access_token}
         r = requests.get(url, params=payload)
         try:
-            return json.loads(r.text.encode('utf-8'))
+            return json.loads(r.text)
         except:
             return None
 
@@ -83,7 +83,30 @@ class Token():
     def __str__(self):
         return self.code
 
+class User():
+
+    def __init__(self, profile_dict):
+        self.profile_string = ""
+        self.parse(profile_dict)
+        print self.profile_string
+        #print profile_dict
+
+    def parse(self, profile):
+        if type(profile) == list:
+            for item in profile:
+                self.parse(item)
+        elif type(profile) == dict:
+            for key, value in profile.items():
+                self.parse(profile[key])
+        elif type(profile) == tuple:
+            for item in profile:
+                self.parse(item)
+        else:
+            try:
+                self.profile_string += profile.encode('utf-8', 'ignore') + "\n"
+            except:
+                pass
 
 if __name__ == "__main__":
     li = LinkedInHandler()
-    print li.get_user()
+    user = User(li.get_user())
