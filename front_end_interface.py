@@ -13,7 +13,7 @@ class jobSearch(object):
     def __init__(self):
         self.job_dictionary = self.get_all_job_info()
         self.job_description_list = [self.procText(self.job_dictionary[entry]['job_description']) for entry in self.job_dictionary.keys()]
-        
+
         # self.tf_dictionary = populate_document_dictionary(self.job_description_list) # is this needed anywhere?
         self.df_dictionary = manual_tfidf.populate_containing_dictionary(self.job_description_list)
         self.doc_weights = cv_comparer.populate_doc_weights(self.job_description_list, self.df_dictionary, len(self.job_description_list)) #list of weights, same index as docList
@@ -28,7 +28,7 @@ class jobSearch(object):
 
     def get_job_info(self, job_id):
         return self.job_dictionary.get(job_id, None)
-    
+
     def get_related_jobs(self, cv, noResults=6):
         pcv = self.procText(cv)
         return cv_comparer.best_matches_fast(pcv, self.doc_weights, self.df_dictionary, len(self.job_description_list), noResults)
@@ -37,14 +37,17 @@ class jobSearch(object):
         return json.dumps(self.job_dictionary.get(job_id, None), ensure_ascii=False)
 
     def return_missing_words(self, cv, job_list):
-        pass
-        ## Get top words from job_list
-        ## Compare to cv
-        ## Return the diff
+        jobs_descriptions = []
+        for job_id in job_list:
+          jobs_descriptions.append(self.get_job_info(job_id))
+        important_word_freqs = manual_tfidf.run_tfidf(jobs_descriptions)
+        important_words = [(word, freq) for (word, freq) in important_word_freqs if word not in cv]
+        return important_words
+
 
     def get_pdf_as_text(self, path_to_pdf):
         return pdfPathToText.convert_pdf_to_txt(path_to_pdf)
-    
+
     def readCVs(self):
       return []
 
@@ -120,7 +123,7 @@ def testImpWords():
       if line[:11] == "NATIONALITY":
         split = True
       cvs[ind] += line + '\n'
-  
+
   #print '\n----------------------\n'.join(cvs)
   return cvs
 
