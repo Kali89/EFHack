@@ -26,7 +26,6 @@ def get_job_by_id(jid):
 class jobSearch(object):
 
     def __init__(self):
-        return
         self.job_dictionary = self.get_all_job_info()
         self.job_description_list = [self.procText(self.job_dictionary[entry]['job_description']) for entry in self.job_dictionary.keys()]
 
@@ -173,16 +172,18 @@ if __name__ == "__main__":
   print inds
   print x.getImpWords(inds, 50)
   """
-  j = jobSearch()
-  j.readCVs('CVs/MiF_2014_data.pickle')
-  j.initCVs()
+#  j = jobSearch()
+ # j.readCVs('CVs/MiF_2014_data.pickle')
+ # j.initCVs()
 #  print j.cv_returner(3)
 #  print j.dispCV
   #print j.job
   #print j.company
 
-  print j.getImpWords("trader",50)
-  #print j.getRelCVs("trader")
+  #print j.getImpWords("trader",50)
+#  for job_id in j.getRelCVs("trader"):
+#      y = j.cv_returner(int(job_id))
+#      print y[job_id]['job']
 #  cv_as_string = j.get_pdf_as_text('MattGaming.pdf')
 #  for job_id in j.get_related_jobs(cv_as_string):
 #      json_job_information = j.get_json_job_info(job_id)
