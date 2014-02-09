@@ -11,6 +11,7 @@ import argparse
 from argparse import ArgumentParser
 import os.path
 import math
+import front_end_interface 
 #import front_end_interface
 #from manual_tfidf import run_tfidf, tfidf
 
@@ -74,7 +75,7 @@ def best_matches_fast(query, docWeights, df, N, noResults):
   qVec = getVector(query, df, N)
   scores = []
   for i in range(len(docWeights)):
-    scores.append(dotProd(qVec, docWeights[i]), i)
+    scores.append((dotProd(qVec, docWeights[i]), i))
 
   sScores = sorted(scores, reverse=True)
   return [i for (s,i) in sScores[:noResults]]
@@ -143,9 +144,9 @@ if __name__ == "__main__":
   related_doc_indices = best_matches(parse_cv(testDoc), all_jobs_dictionary, index_dictionary, 4)
   print related_doc_indices
 
-  j = jobSearch()
+  j = front_end_interface.jobSearch()
 
-  print best_matches_fast(j.procText(testContents), j.doc_weights, j.df_dictionary, 4)
+  print best_matches_fast(j.procText(testContents), j.doc_weights, j.df_dictionary,len(j.job_description_list), 4)
 
 ## Show the 'customer' title and description on all 3 jobs
 #useful_dictionary = dict(get_similar_documents(item, similarity_matrix, 5) for item in related_docs_indices[1:])
