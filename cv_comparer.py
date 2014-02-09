@@ -10,6 +10,8 @@ import sys
 import argparse
 from argparse import ArgumentParser
 import os.path
+import math
+#import front_end_interface
 #from manual_tfidf import run_tfidf, tfidf
 
 ### Grab their CV and split it up
@@ -45,18 +47,6 @@ def parse_arguments():
     args = parser.parse_args()
     return args
 
-## Get all the jobs out of the database
-all_jobs_dictionary = dict((line[0], line[1].strip().replace('\n', ' ')) for line in run_query('SELECT search_id, job_description from test.job_results') if len(line[1].strip().replace('\n', ' ').split(' ')) > 30 )
-i = 0
-index_dictionary = {}
-for line in run_query('SELECT search_id, job_description from test.job_results'):
-    if len(line[1].strip().replace('\n', ' ').split(' ')) > 30:
-        i += 1
-        index_dictionary[i] = line[0]
-    else:
-        index_dictionary[i] = False
-
-
 ## Find similarity matrix between job postings
 def make_similarity_matrix(all_jobs_dictionary):
     job_list_without_cv = [all_jobs_dictionary[key].decode('utf-8', 'ignore') for key in all_jobs_dictionary.keys()] 
@@ -74,7 +64,89 @@ def best_matches(cv, all_jobs_dictionary, index_dictionary, number_of_results):
     actual_indices = [index_dictionary[index] for index in related_docs_indices if index != 0]
     return actual_indices
 
-related_doc_indices = best_matches(parse_cv('test_document.txt'), all_jobs_dictionary, index_dictionary, 4)
+def populate_doc_weights(docList, df, N):
+  weights = []
+  for i in range(len(docList)):
+    weights.append(getVector(docList[i], df, N))
+  return weights
+
+def best_matches_fast(query, docWeights, df, N, noResults):
+  qVec = getVector(query, df, N)
+  scores = []
+  for i in range(len(docWeights)):
+    scores.append(dotProd(qVec, docWeights[i]), i)
+
+  sScores = sorted(scores, reverse=True)
+  return [i for (s,i) in sScores[:noResults]]
+  
+def dotProd(v1, v2):
+  #checkNorm(v1)
+  #checkNorm(v2)
+  prod = 0
+  for (w,s) in v1.items():
+    if w in v2:
+      prod += s*v2[w]
+  return prod
+
+def getVector(query, df, N, tp=None):
+  tf = getTF(query)
+  vec = {}
+  for word in query:
+    if not word in df:
+      continue
+    if tp != None:
+      print word, tf[word], len(df[word]), N, calcWeight(tf[word], len(df[word]), N)
+    vec[word] = calcWeight(tf[word], len(df[word]), N)
+
+  return normalize(vec)
+
+def calcWeight(tf, df, N):
+  tfw = tf
+  idfw = math.log(N/(1.0+df))
+  return tfw*idfw
+
+def getTF(query):
+  tf = {}
+  for word in query:
+    try:
+      tf[word] += 1
+    except:
+      tf[word] = 1
+  return tf
+
+def normalize(a):
+  factor = math.sqrt(sum([x*x for x in a.values()]))
+  return dict([(k, x/factor) for (k, x) in a.items()])
+
+def checkNorm(a):
+  assert(abs(sum([x*x for x in a.values()]) - 1) < 0.0001)
+
+if __name__ == "__main__":
+  testDoc = 'test_document.txt'
+  with open(testDoc, 'r') as f:
+    testContents = f.read()
+
+  #print parse_cv(testDoc)
+  #print front_end_interface.jobSearch().procText(testContents)
+
+  ## Get all the jobs out of the database
+  all_jobs_dictionary = dict((line[0], line[1].strip().replace('\n', ' ')) for line in run_query('SELECT search_id, job_description from test.job_results') if len(line[1].strip().replace('\n', ' ').split(' ')) > 30 )
+  i = 0
+  index_dictionary = {}
+  for line in run_query('SELECT search_id, job_description from test.job_results'):
+      if len(line[1].strip().replace('\n', ' ').split(' ')) > 30:
+          i += 1
+          index_dictionary[i] = line[0]
+      else:
+          index_dictionary[i] = False
+
+  related_doc_indices = best_matches(parse_cv(testDoc), all_jobs_dictionary, index_dictionary, 4)
+  print related_doc_indices
+
+  j = jobSearch()
+
+  print best_matches_fast(j.procText(testContents), j.doc_weights, j.df_dictionary, 4)
+
 ## Show the 'customer' title and description on all 3 jobs
 #useful_dictionary = dict(get_similar_documents(item, similarity_matrix, 5) for item in related_docs_indices[1:])
 #
