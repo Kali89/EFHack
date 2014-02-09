@@ -24,7 +24,7 @@ class jobSearch(object):
 
     def get_all_job_info(self):
         sql_query = "SELECT * FROM test.job_results"
-        return dict((job_id, {'search_term' : search.decode('utf-8', 'ignore'), 'location_term' : location.decode('utf-8', 'ignore'), 'job_title' : title.decode('utf-8', 'ignore'), 'job_description' : description.decode('utf-8', 'ignore')}) for (job_id, search, location, title, description) in cv_comparer.run_query(sql_query))
+        return dict((job_id, {'job_id': job_id, 'search_term' : search.decode('utf-8', 'ignore'), 'location_term' : location.decode('utf-8', 'ignore'), 'job_title' : title.decode('utf-8', 'ignore'), 'job_description' : description.decode('utf-8', 'ignore')}) for (job_id, search, location, title, description) in cv_comparer.run_query(sql_query))
 
     def get_job_info(self, job_id):
         return self.job_dictionary.get(job_id, None)
@@ -65,64 +65,52 @@ class jobSearch(object):
       #print sorted(vec.items(), key=lambda x: x[1], reverse=True)
       return map(lambda x:x[0], sorted(vec.items(), key=lambda x: x[1], reverse=True)[:noWords])
 
-def searchWord(word, dicts):
-  inds = set([])
-  for d in dicts:
-    for (k,v) in d.items():
-      if word in k.split():
-        inds = inds.union(set(v))
-  return inds
+    def searchWord(self, word, dicts):
+        inds = set([])
+        for d in dicts:
+        for (k,v) in d.items():
+          if word in k.split():
+            inds = inds.union(set(v))
+        return inds
 
-def searchOr(words, dicts):
-  inds = set([])
-  for word in words:
-    inds = inds.union(searchWord(word, dicts))
-  return inds
+    def parseSearch(self, query, dicts):
+      if '&' in query:
+        (f,s) = query.split('&',1)
+        inds = self.parseSearch(f, dicts)
+        inds = inds.intersection(parseSearch(s,dicts))
+        return inds
+      elif ' ' in query:
+        (f,s) = query.split(' ',1)
+        inds = self.parseSearch(f, dicts)
+        inds = inds.union(parseSearch(s,dicts))
+        return inds
+      else:
+        return self.searchWord(query, dicts)
 
-def searchAnd(words, dicts):
-  if len(words) == 0:
-    return set([])
-  inds = set(seachWord(word[0],dicts))
-  for word in words[1:]:
-    inds = inds.intersection(searchWord(word, dicts))
-  return inds
+    def concat(self,lists):
+        rez = []
+        for l in lists:
+          rez += l
+        return rez
 
-def parseSearch(query, dicts):
-  if '&' in query:
-    (f,s) = query.split('&',1)
-    inds = parseSearch(f, dicts)
-    inds = inds.intersection(parseSearch(s,dicts))
-    return inds
-  elif ' ' in query:
-    (f,s) = query.split(' ',1)
-    inds = parseSearch(f, dicts)
-    inds = inds.union(parseSearch(s,dicts))
-    return inds
-  else:
-    return searchWord(query, dicts)
+    def testImpWords(self):
+      cvs = [""]
+      split = False
+      ind = 0
+      with open("MBA_2014.txt",'r') as f:
+        for line in f:
+          if split:
+            ind += 1
+            split = False
+            cvs.append("")
+          if line[:11] == "NATIONALITY":
+            split = True
+          cvs[ind] += line + '\n'
+      
+      #print '\n----------------------\n'.join(cvs)
+      return cvs
 
-def concat(lists):
-    rez = []
-    for l in lists:
-      rez += l
-    return rez
 
-def testImpWords():
-  cvs = [""]
-  split = False
-  ind = 0
-  with open("MBA_2014.txt",'r') as f:
-    for line in f:
-      if split:
-        ind += 1
-        split = False
-        cvs.append("")
-      if line[:11] == "NATIONALITY":
-        split = True
-      cvs[ind] += line + '\n'
-  
-  #print '\n----------------------\n'.join(cvs)
-  return cvs
 
 if __name__ == "__main__":
   """
@@ -133,10 +121,10 @@ if __name__ == "__main__":
   print inds
   print x.getImpWords(inds, 50)
   """
-  j = jobSearch()
-  cv_as_string = j.get_pdf_as_text('MattGaming.pdf')
-  for job_id in j.get_related_jobs(stringy):
-      json_job_information = j.get_json_job_info(job_id)
-      print json_job_information
-#  dicts = [{'abra cada bra':[1,2,3,4,5], 'qui':[3,7,9,10], 'pui':[3,4,5,6,7]},{'lui':[2,3,4,9],'cui':[1,8,5,10]}]
-#  print parseSearch("qui",dicts)
+#  j = jobSearch()
+#  cv_as_string = j.get_pdf_as_text('MattGaming.pdf')
+#  for job_id in j.get_related_jobs(cv_as_string):
+#      json_job_information = j.get_json_job_info(job_id)
+#      print json_job_information
+  dicts = [{'abra cada bra':[1,2,3,4,5], 'qui':[3,7,9,10], 'pui':[3,4,5,6,7]},{'lui':[2,3,4,9],'cui':[1,8,5,10]}]
+  print parseSearch("qui & pui",dicts)
