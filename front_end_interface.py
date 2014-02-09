@@ -32,8 +32,6 @@ class jobSearch(object):
         # self.tf_dictionary = populate_document_dictionary(self.job_description_list) # is this needed anywhere?
         self.df_dictionary = manual_tfidf.populate_containing_dictionary(self.job_description_list)
         self.doc_weights = cv_comparer.populate_doc_weights(self.job_description_list, self.df_dictionary, len(self.job_description_list)) #list of weights, same index as docList
-        self.readCVs('CVs/MiF_2014_data.pickle')
-        self.initCVs()
 
 
     def procText(self, desc):
@@ -69,6 +67,17 @@ class jobSearch(object):
 
     def get_pdf_as_text(self, path_to_pdf):
         return pdfPathToText.convert_pdf_to_txt(path_to_pdf)
+
+class cvSearch(object):
+
+    def __init__(self):
+        self.readCVs('CVs/All_data.pickle')
+        self.initCVs()
+
+
+    def procText(self, desc):
+      fDesc = re.sub(r'[^a-zA-Z0-9_\'-]+', ' ', desc.lower())
+      return fDesc.split()
 
     def readCVs(self, path):
         with open(path, 'r') as f:
@@ -177,14 +186,9 @@ if __name__ == "__main__":
   print inds
   print x.getImpWords(inds, 50)
   """
-#  j = jobSearch()
- # j.readCVs('CVs/MiF_2014_data.pickle')
- # j.initCVs()
-#  print j.cv_returner(3)
-#  print j.dispCV
-  #print j.job
-  #print j.company
-
+#  j = cvSearch()
+#  j.readCVs('CVs/MiF_2014_data.pickle')
+#  j.initCVs()
   #print j.getImpWords("trader",50)
 #  for job_id in j.getRelCVs("trader"):
 #      y = j.cv_returner(int(job_id))
