@@ -66,7 +66,7 @@ class jobSearch(object):
 class cvSearch(object):
 
     def __init__(self):
-        self.readCVs('CVs/MiF_2014_data.pickle')
+        self.readCVs('CVs/All_data.pickle')
         self.initCVs()
 
 
