@@ -25,5 +25,5 @@ def convert_pdf_to_txt(path):
     retstr.close()
     return str
 
-if __name__ == "__main__":
-    print convert_pdf_to_txt(sys.argv[1])
+#if __name__ == "__main__":
+#    print convert_pdf_to_txt(sys.argv[1])

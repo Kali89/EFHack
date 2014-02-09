@@ -1,68 +1,83 @@
-Miss Rachael Irwin, BSc Hons (Dunelm)
+﻿MATTHEW SHARPE
+15A County Road
+Stafford,
+Staffordshire,										07732885524
+ST16 2PU								matthewsharpe3@gmail.com	
+SUMMARY
 
-Personal Details
-Rachael Elizabeth Irwin                     11 Ravenhurst Road
-DoB. 31st October 1989                      Harborne
-                                    Birmingham
-                                    Email: mrxrei@nottingham.ac.uk                  B17 9TB
+Masters degree educated data scientist with a history of academic and career success. Experience of working in an emerging data science department – choosing and implementing new technologies and methodologies. Enthused by the chance to continue working in a data science role with cutting edge technologies and the brightest people around.
 
-                                    Employment History
-                                    Oct. 2011 - Present     Healthcare Scientist Trainee (Genetics)
-                                                    West Midlands Regional Genetics Laboratory
-                                                                    Birmingham Women’s Hospital NHS Foundation Trust
-                                                                    NHS Modernising Scientific Careers - Scientist Training Programme.
-                                                                    Three year post-graduate scheme, working full-time with a part-time MSc hosted by the University of Nottingham.
-                                                                    Comprising one year of pathology rotations in Genetics, Biochemistry, Histopathology and Reproductive Science; followed by two years of specialist training in Genetics.
-                                                                    Specialist training includes modules on Infertility and Sexual Differentiation, Developmental Disorders, Neuromuscular Disorders, Population Screening, and Cancer; plus a research project. 
-                                                                    Current experience (4 months into specialist training) in cytogenetic chromosome analysis, fluorescence in-situ hybridisation, and various PCR-based methods; with a theoretical knowledge of techniques including real-time PCR, MLPA, sequencing (Sanger and pyrosequencing) and microarray.
+PROFESSIONAL EXPERIENCE
 
-                                                                    Oct. 2010 - Sept. 2011  MB Air Systems (Wishaw)
-                                                                    Varied duties including office cleaning and working on the reception desk (answering telephone calls and performing other administrative tasks).
+THE hut group
+June 2012 - Present
+Data Scientist
+	
+Generating insight as part of the newly formed Growth and Innovation team. Responsible for using bleeding edge technologies with big data to suggest and implement business change.
 
+Generated upwards of £500k revenue/year building an in-house recommendations service, testing a variety of machine learning algorithms to show the best products in the right places.
+Set up the company's first Hadoop Cluster and used this to run AB tests and perform statistical analysis.
+Implemented an automated 'browse-abandon' email system responsible for £16k revenue/month.
+Built a real time, interactive reporting solution based on 8GB daily log files.
+Deployed code to 27 major websites with close to 500,000 viewers a day.
 
-                                                                    Relevant Experience
-                                                                    2010        BSc Research Project module – Production of plasmid constructs
-                                                                    Five weeks of laboratory work including PCR and primer design, electrophoresis, restriction digest, and interpretation of Sanger sequencing results.
+Technical Marketplace Manager                                                     	
 
-                                                                    2009        Wellcome Trust funded vacation scholarship (Glasgow Caledonian University)
-                                                                    Seven weeks of laboratory work including tissue culture (of an immortal mammalian cell line), immunofluorescence and Western blotting.
+Managing the technical side of all the businesses marketplace offerings (eBay, GroupOn) and the whole business (technical and commercial) offering with Amazon and Play.
 
-
-                                                                    Education
-                                                                    Oct. 2011 - Present     University of Nottingham 
-                                                                    (Part-time study)       MSc Clinical Science (Clinical Genetics)
-                                                                                    1st year average 84% (Distinction)
-
-                                                                                    Oct. 2007 - June 2010       University of Durham (Grey College)
-                                                                                                    BSc (Hons) Molecular Biology and Biochemistry
-                                                                                                                    1st Class Honours (top in the year) 
-
-                                                                                                                    May 2007            Carluke High School
-                                                                                                                    3 Advanced Highers at Grade A – Biology, Chemistry, Mathematics
-                                                                                                                                    1 Higher at Grade A – Physics
-
-                                                                                                                                    May 2006            Carluke High School
-                                                                                                                                    5 Highers at Grade A – Biology, Chemistry, Mathematics, English, Music
-
-                                                                                                                                    May 2005            Carluke High School
-                                                                                                                                                    8 Standard Grades at Grade 1
+Built and maintained automated pricing solutions for both Amazon and Play, generating upwards of £5,000/day revenue, increasing profitability and allowing better management of aging stock.
 
 
-                                                                                                                                                    Academic Achievements
-                                                                                                                                                    June 2010   The Boulter Prize – Biological Sciences Dpt, University of Durham
-                                                                                                                                                    Highest final degree mark in the BSc Molecular Biology and Biochemistry programme
+MARS PETCARE UK
+September 2011 – June 2012 
+Management Development Program
+                                          
 
-                                                                                                                                                    June 2007   Carluke High School subject prizes – Advanced Higher Biology, Chemistry and Mathematics
-                                                                                                                                                                Excellence in Sciences Shield
+Managing projects to improve the efficiency and reduce the waste of a large manufacturing operation line.
 
-                                                                                                                                                                June 2006       First Dux of Carluke High School
+Led a group of 6 employees to deliver £80,000 worth of annualized savings through a project to reduce the quantity of unlogged waste in the factory.
 
 
-                                                                                                                                                                References
-                                                                                                                                                                Miss Jennie Bell FRCPath                    Mr Andrew Patrick
-                                                                                                                                                                Head of Cancer Genetics/Training Officer            Management Board Director
-                                                                                                                                                                West Midlands Regional Genetics Laboratory      MB Air Systems
-                                                                                                                                                                Birmingham Women’s NHS Foundation Trust
+ADDLESHAW GODDARD LLP, COBBETTS LLP, BRISTOWS LLP, DELOITTE LLP
 
-                                                                                                                                                                Contact details available upon request.
+June 2009 – June 2011
+Vacation Scheme Placements
 
+
+Completing small parts of larger legal projects and discovering aspects of legal work through case studies. Attending training courses on interviewing, drafting and writing in a technical but understandable way. Interviewing clients at their own site, completing tax calculations and delivering presentations on complex areas of tax regulation to senior partners.
+
+SELF EMPLOYED
+2005 – 2007 
+Guitar teacher
+
+
+Marketing myself effectively to attract students, preparing and delivering lessons in an engaging fashion and managing a client base of up to 10 students.
+
+SKILLS
+Python
+Databases (SQL Server, MySQL, Cassandra, Mongo, Redis)
+Machine Learning
+Linux
+Statistical Testing
+Hadoop, HDFS and MapReduce
+Web technologies (Javascript, jQuery, HTML)
+Microsoft (Applications, some VB)
+Version control (Subversion, Git)
+Programming Languages (Matlab/Octave, Java)
+
+EDUCATION
+
+Durham University - Master of Natural Sciences (Mathematics & Physics) – 2:1
+
+Completed a project in Python creating a simulation of the evolution of life (Conway's Game of Life) with both closed and repeating boundary conditions.
+  Programmed extensively in Matlab in order to numerically solve third order partial differential equations with varying boundary conditions.
+
+St Mary's High School – A levels (Mathematics, Physics, Chemistry, History) – 4 As
+
+Tupton Hall School – GCSEs – 6 A*s, 3 As, 1 B
+
+INTERESTS
+
+I am a keen sportsman, gaining certification in sports coaching and have participated at a county level for squash.
+
+I also keep up my interest in guitar and music in general and have, and continue to, play in a number of bands of varying standard.

@@ -19,12 +19,12 @@ def populate_document_dictionary(documentlist):
     for document_index in range(len(documentlist)):
         word_count = 0
         document_dictionary[document_index] = {}
-        for word in documentlist[document_index].split(' '):
+        for word in documentlist[document_index]:
             word_count += 1
-            if word not in document_dictionary[document_index]:
-                document_dictionary[document_index][word] = 1
-            else:
+            try:
                 document_dictionary[document_index][word] += 1
+            except:
+                document_dictionary[document_index][word] = 1
         document_dictionary[document_index]['count'] = word_count
     return document_dictionary
 
@@ -48,11 +48,11 @@ def populate_containing_dictionary(documentlist):
     """
     wordy_dictionary = {}
     for document_index in range(len(documentlist)):
-        for word in documentlist[document_index].split(' '):
-            if word in wordy_dictionary:
-                wordy_dictionary[word].append(document_index)
-            else:
-                wordy_dictionary[word] = [document_index]
+        for word in documentlist[document_index]:
+            try:
+                wordy_dictionary[word].add(document_index)
+            except:
+                wordy_dictionary[word] = set([document_index])
     return wordy_dictionary
 
 def new_idf(word, useful_dictionary, documentlist):
