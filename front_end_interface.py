@@ -60,8 +60,24 @@ class jobSearch(object):
         important_words = [(word, freq) for (word, freq) in important_word_freqs if word not in cv]
         return important_words
 
+    def getImpWords(self, cv, inds):
+      blob = self.getBlob(inds)
+      vec = cv_comparer.getVector(blob, self.df_dictionary, len(self.job_description_list), tp=None)
+      #print sorted(vec.items(), key=lambda x: x[1], reverse=True)
+      scv = set(cv)
+      return [r[0] for r in sorted(vec.items(), key=lambda x: x[1], reverse=True) if r not in scv] 
+
     def get_pdf_as_text(self, path_to_pdf):
         return pdfPathToText.convert_pdf_to_txt(path_to_pdf)
+
+    def concat(self, lists):
+        rez = []
+        for l in lists:
+          rez += l
+        return rez
+
+    def getBlob(self, inds):
+      return self.concat([self.job_description_list[i] for i in inds])
 
 class cvSearch(object):
 
@@ -116,7 +132,7 @@ class cvSearch(object):
 
     def getImpWords(self, query, noWords):
       query = query.lower()
-      inds = list(self.parseSearch(query, [self.job, self.company]))
+      inds = list(self.parseSearch(query, [dict([(self.bizExp[i],[i]) for i in range(len(self.bizExp))]), self.job, self.company]))
       blob = self.getBlob(inds)
       vec = cv_comparer.getVector(blob, self.cvDfs, len(self.cvList), tp=None)
       #print sorted(vec.items(), key=lambda x: x[1], reverse=True)
@@ -124,7 +140,7 @@ class cvSearch(object):
 
     def getRelCVs(self, query):
       query = query.lower()
-      inds = list(self.parseSearch(query, [self.job, self.company]))
+      inds = list(self.parseSearch(query, [dict([(self.bizExp[i],[i]) for i in range(len(self.bizExp))]), self.job, self.company]))
       return inds
 
     def searchWord(self, word, dicts):
@@ -181,10 +197,8 @@ if __name__ == "__main__":
   print inds
   print x.getImpWords(inds, 50)
   """
-#  j = cvSearch()
-#  j.readCVs('CVs/MiF_2014_data.pickle')
-#  j.initCVs()
-  #print j.getImpWords("trader",50)
+  j = cvSearch()
+  print j.getImpWords("derivatives",50)
 #  for job_id in j.getRelCVs("trader"):
 #      y = j.cv_returner(int(job_id))
 #      print y[job_id]['job']
