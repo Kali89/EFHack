@@ -21,39 +21,32 @@ def getJobs(filePath):
     while line != '':
 
         # print 'start again at line:', line
-        # print 'incrementing cvCount'
         cvCount += 1
         
-        while '@london.edu' not in line:
+        while not isEmail(line):
             prevline = line
             line = inpf.readline()
-            # print line, prevline
+            # if 'FAISAL AZIZ' in line:
+            #     print 'found Baran, exit0'
+                # return
             if line == '': return bizExp, edu, job, company, name, email, phoneNumber, cvCount
             
-        # # print 'found beginning of a new CV! starts with:', prevline
-
-        # increment cvCount, initialise dictionary entries
+        # print 'found beginning of a new CV! starts with:', prevline
         
         # found name: remove whitespace, add it to relevant dict
-        # try :
-        #     name[prevline.strip()].append(cvCount)
-        # except:
-        # print 'ADDING NAME', prevline.strip()
-        if 'Ravi Varghese' in prevline:
-            # print 'found Ravi Varghese, exiting'
-            return
+        print 'ADDING NAME', prevline.strip()
         name[prevline.strip()] = []
         name[prevline.strip()].append(cvCount)
 
         # found email: remove whitespace, add it to relevant dict
-        # try :
-        #     email[line.strip()] = cvCount
-        # except:
         email[line.strip()] = []
         email[line.strip()].append(cvCount)
         
         # prevline = line dont need this
         line = inpf.readline()
+        # if 'FAISAL AZIZ' in line:
+        #     print 'found Ravi, exit2'
+        #     return
         # print line, prevline
         if line == '': return bizExp, edu, job, company, name, email, phoneNumber, cvCount
         
@@ -66,27 +59,31 @@ def getJobs(filePath):
         
         # prevline = line dont need this
         line = inpf.readline()
+        # if 'FAISAL AZIZ' in line:
+        #     print 'found Ravi, exit3'
+        #     return
         # print line, prevline
         if line == '': return bizExp, edu, job, company, name, email, phoneNumber, cvCount
 
         while 'EDUCATION' not in line:
             # prevline = line dont needd this
             line = inpf.readline()
+            # if 'FAISAL AZIZ' in line:
+            #     print 'found Ravi, exit4'
+            #     return
             # print line, prevline
             if line == '': return bizExp, edu, job, company, name, email, phoneNumber, cvCount
 
         # found education: add it to relevant list
         while 'BUSINESS EXPERIENCE' not in line:
-            #try:
-            # # print 'about to append', line, 'to edu[', cvCount, ']'
             try:
                 edu[cvCount] += line
             except:
                 edu.append(line)
-            # except:
-            #     edu[cvCount] = []
-            #     edu[cvCount].append(line)
             line = inpf.readline()
+            # if 'FAISAL AZIZ' in line:
+            #     print 'found Ravi, exit5'
+            #     return
             # print line, prevline
             if line == '': return bizExp, edu, job, company, name, email, phoneNumber, cvCount
 
@@ -98,15 +95,21 @@ def getJobs(filePath):
             
         # find next company
         while 'ADDITIONAL INFORMATION' not in line:
+            #print line, '-> evaluating for bizExp'
+            #return inpf, line
             while 'ADDITIONAL INFORMATION' not in line and threeConsecCaps(line) < 0:
+                print line, '-> added to bizExp'
                 line = inpf.readline()
+                # if 'FAISAL AZIZ' in line:
+                #     print 'found Ravi, exit6'
+                #     return bizExp, edu, job, company, name, email, phoneNumber, cvCount
                 # print line, prevline
                 bizExp[cvCount] += line
                 if line == '': return bizExp, edu, job, company, name, email, phoneNumber, cvCount
 
             i = threeConsecCaps(line)
             if i >= 0: # found company name: extract and add to relevant dict
-                # # print 'found company name:', line[i:].partition(',')[0]
+                # print 'found company name:', line[i:].partition(',')[0]
                 try:
                     company[line[i:].partition(',')[0]].append(cvCount)
                 except:
@@ -117,17 +120,15 @@ def getJobs(filePath):
             while '\xe2\x80\xa2' not in line:
                 prevline = line
                 line = inpf.readline()
+                # if 'FAISAL AZIZ' in line:
+                #     print 'found Ravi, exit7'
+                #     return
                 # print line, prevline
                 bizExp[cvCount] += line
                 if line == '': return bizExp, edu, job, company, name, email, phoneNumber, cvCount
-
-            # this might seem useless, but gets rid of 3 capital letters and bullet point edge case
-            # prevline = line
-            # line = inpf.readline()
-            # bizExp[cvCount] += line
             
             # found job: remove whitespace, add it to relevant list
-            # # print 'found job:', prevline.strip()
+            # print 'found job:', prevline.strip()
             try:
                 job[prevline.strip()].append(cvCount)
             except:
@@ -137,17 +138,23 @@ def getJobs(filePath):
             # move to end of job description, ie either next job or additional information
             while line[0]==' ':
                 line = inpf.readline()
+                # if 'FAISAL AZIZ' in line:
+                #     print 'found Ravi, exit8'
+                #     return
                 # print line, prevline
                 bizExp[cvCount] += line
                 if line == '': return bizExp, edu, job, company, name, email, phoneNumber, cvCount
 
-            # # print 'should be ADDITIONAL INFORMATION or end of file:', line
+            # print 'should be ADDITIONAL INFORMATION or end of file:', line
 
         while 'NATIONALITY' not in line:
             line = inpf.readline()
+            # if 'FAISAL AZIZ' in line:
+            #     print 'found Ravi, exit9'
+            #     return
             # print line, prevline
 
-        ## print line, 'met so exiting'
+        # print line, 'met so exiting'
         #return bizExp, edu, job, company, name, email, phoneNumber, cvCount
 
     return bizExp, edu, job, company, name, email, phoneNumber, cvCount
@@ -155,11 +162,19 @@ def getJobs(filePath):
 
 def threeConsecCaps(line):
     for i in range(len(line)-3):
-        if (line[0]+line[1]+line[2]+line[3]).isdigit() and (line[4]+line[5]+line[6]) == ' - ' and (line[7]+line[8]+line[9]+line[10]).isdigit() and (line[11]+line[12]+line[13]) == '   ' and (line[14]+line[15]).isupper() and (line[14]+line[15]).isalpha(): return 14
+        if isDate(line[0:14]) and (line[14:15]).isupper() and (line[14:15]).isalpha(): return 14
         # if (line[i]+line[i+1]+line[i+2]).isupper() and (line[i]+line[i+1]+line[i+2]).isalpha() and line[i+3]==',': return i
     return -1
 
+def isDate(line):
+    if (line[0:3]).isdigit() and (line[4:7]) == ' - ' and (line[7:10]).isdigit() and (line[11:14]) == '   ': return True
+    if (line[0:2]).isalpha() and (line[4:7]).isdigit() and (line[9:11]) == 'to' and (line[11:14]) == '   ': return True
+    return False
 
+def isEmail(line):
+    if '@london.edu' in line: return True
+    if '@gmail.com' in line: return True
+    
 def missingCVs(max, name):
     for num in range(max):
         found = False
@@ -173,10 +188,10 @@ def missingCVs(max, name):
 if __name__ == "__main__" :
     outfilename = sys.argv[1].partition('.')[0] + '_data.pickle'
     with open(outfilename, 'w') as f:
-        bizExp, edu, job, company, name, email, phoneNumber, cvCount = getjobs(sys.argv[1])
+        bizExp, edu, job, company, name, email, phoneNumber, cvCount = getJobs(sys.argv[1])
         data = pickle.dump((bizExp, edu, job, company, name, email, phoneNumber, cvCount), f)
     # data = pickle(getjobs(sys.argv[1]))
 
 # import getjobs
-# bizExp, edu, job, company, name, email, phoneNumber, cvCount = getjobs.getJobs('CVs/MiF_2014.txt')
+# bizExp, edu, job, company, name, email, phoneNumber, cvCount = getJobs('CVs/All.txt')
 # getjobs.missingCVs(64, name)
