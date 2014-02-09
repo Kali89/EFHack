@@ -104,7 +104,7 @@ class cvSearch(object):
     def cv_returner(self, cv_id):
         cv_dictionary = {}
         bizExp, edu, job, company, name, email, phoneNumber = self.dispCV[cv_id]
-        cv_dictionary[cv_id] = {'business_experience' : bizExp, 'education' : edu, 'job' : ' '.join([job_entry for job_entry in job]), 'company' : ' '.join([company_instance for company_instance in company]), 'name' : ' '.join([name_instance for name_instance in name]), 'email' : ' '.join([email_instance for email_instance in email]), 'phone' : ' '.join([phone_instance for phone_instance in phoneNumber])}
+        cv_dictionary[cv_id] = {'business_experience' : bizExp, 'education' : edu, 'job' : ','.join([job_entry for job_entry in job]), 'company' : ','.join([company_instance for company_instance in company]), 'name' : ' '.join([name_instance for name_instance in name]), 'email' : ' '.join([email_instance for email_instance in email]), 'phone' : ' '.join([phone_instance for phone_instance in phoneNumber])}
         return cv_dictionary
 
 
