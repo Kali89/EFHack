@@ -122,31 +122,31 @@ def normalize(a):
 def checkNorm(a):
   assert(abs(sum([x*x for x in a.values()]) - 1) < 0.0001)
 
-if __name__ == "__main__":
-  testDoc = 'test_document.txt'
-  with open(testDoc, 'r') as f:
-    testContents = f.read()
-
-  #print parse_cv(testDoc)
-  #print front_end_interface.jobSearch().procText(testContents)
-
-  ## Get all the jobs out of the database
-  all_jobs_dictionary = dict((line[0], line[1].strip().replace('\n', ' ')) for line in run_query('SELECT search_id, job_description from test.job_results') if len(line[1].strip().replace('\n', ' ').split(' ')) > 30 )
-  i = 0
-  index_dictionary = {}
-  for line in run_query('SELECT search_id, job_description from test.job_results'):
-      if len(line[1].strip().replace('\n', ' ').split(' ')) > 30:
-          i += 1
-          index_dictionary[i] = line[0]
-      else:
-          index_dictionary[i] = False
-
-  related_doc_indices = best_matches(parse_cv(testDoc), all_jobs_dictionary, index_dictionary, 4)
-  print related_doc_indices
-
-  j = front_end_interface.jobSearch()
-
-  print best_matches_fast(j.procText(testContents), j.doc_weights, j.df_dictionary,len(j.job_description_list), 4)
+#if __name__ == "__main__":
+#  testDoc = 'test_document.txt'
+#  with open(testDoc, 'r') as f:
+#    testContents = f.read()
+#
+#  #print parse_cv(testDoc)
+#  #print front_end_interface.jobSearch().procText(testContents)
+#
+#  ## Get all the jobs out of the database
+#  all_jobs_dictionary = dict((line[0], line[1].strip().replace('\n', ' ')) for line in run_query('SELECT search_id, job_description from test.job_results') if len(line[1].strip().replace('\n', ' ').split(' ')) > 30 )
+#  i = 0
+#  index_dictionary = {}
+#  for line in run_query('SELECT search_id, job_description from test.job_results'):
+#      if len(line[1].strip().replace('\n', ' ').split(' ')) > 30:
+#          i += 1
+#          index_dictionary[i] = line[0]
+#      else:
+#          index_dictionary[i] = False
+#
+#  related_doc_indices = best_matches(parse_cv(testDoc), all_jobs_dictionary, index_dictionary, 4)
+#  print related_doc_indices
+#
+#  j = front_end_interface.jobSearch()
+#
+#  print best_matches_fast(j.procText(testContents), j.doc_weights, j.df_dictionary,len(j.job_description_list), 4)
 
 ## Show the 'customer' title and description on all 3 jobs
 #useful_dictionary = dict(get_similar_documents(item, similarity_matrix, 5) for item in related_docs_indices[1:])

@@ -1,7 +1,12 @@
 #!/usr/bin/python
 import re
-from manual_tfidf import populate_document_dictionary, populate_containing_dictionary
-from cv_comparer import run_query, populate_doc_weights, best_matches_fast, getVector
+import manual_tfidf
+import cv_comparer
+import pdfPathToText
+import json
+#from manual_tfidf import populate_document_dictionary, populate_containing_dictionary
+#from cv_comparer import run_query, populate_doc_weights, best_matches_fast, getVector
+#from pdfPathToText import convert_pdf_to_txt
 
 class jobSearch(object):
 
@@ -10,8 +15,8 @@ class jobSearch(object):
         self.job_description_list = [self.procText(self.job_dictionary[entry]['job_description']) for entry in self.job_dictionary.keys()]
         
         # self.tf_dictionary = populate_document_dictionary(self.job_description_list) # is this needed anywhere?
-        self.df_dictionary = populate_containing_dictionary(self.job_description_list)
-        self.doc_weights = populate_doc_weights(self.job_description_list, self.df_dictionary, len(self.job_description_list)) #list of weights, same index as docList
+        self.df_dictionary = manual_tfidf.populate_containing_dictionary(self.job_description_list)
+        self.doc_weights = cv_comparer.populate_doc_weights(self.job_description_list, self.df_dictionary, len(self.job_description_list)) #list of weights, same index as docList
 
     def procText(self, desc):
       fDesc = re.sub(r'[^a-zA-Z0-9_\'-]+', ' ', desc.lower())
@@ -19,14 +24,17 @@ class jobSearch(object):
 
     def get_all_job_info(self):
         sql_query = "SELECT * FROM test.job_results"
-        return dict((job_id, {'search_term' : search.decode('utf-8', 'ignore'), 'location_term' : location.decode('utf-8', 'ignore'), 'job_title' : title.decode('utf-8', 'ignore'), 'job_description' : description.decode('utf-8', 'ignore')}) for (job_id, search, location, title, description) in run_query(sql_query))
+        return dict((job_id, {'search_term' : search.decode('utf-8', 'ignore'), 'location_term' : location.decode('utf-8', 'ignore'), 'job_title' : title.decode('utf-8', 'ignore'), 'job_description' : description.decode('utf-8', 'ignore')}) for (job_id, search, location, title, description) in cv_comparer.run_query(sql_query))
 
     def get_job_info(self, job_id):
         return self.job_dictionary.get(job_id, None)
     
     def get_related_jobs(self, cv, noResults=6):
         pcv = self.procText(cv)
-        return best_matches_fast(pcv, self.doc_weights, self.df_dictionary, len(self.job_description), noResults)
+        return cv_comparer.best_matches_fast(pcv, self.doc_weights, self.df_dictionary, len(self.job_description_list), noResults)
+
+    def get_json_job_info(self, job_id):
+        return json.dumps(self.job_dictionary.get(job_id, None), ensure_ascii=False)
 
     def return_missing_words(self, cv, job_list):
         pass
@@ -34,6 +42,9 @@ class jobSearch(object):
         ## Compare to cv
         ## Return the diff
 
+    def get_pdf_as_text(self, path_to_pdf):
+        return pdfPathToText.convert_pdf_to_txt(path_to_pdf)
+    
     def readCVs(self):
       return []
 
@@ -42,15 +53,15 @@ class jobSearch(object):
         self.cvList = self.readCVs()
       else:
         self.cvList = [self.procText(r) for r in read]
-      self.cvDfs = populate_containing_dictionary(self.cvList)
-      self.cvWeights = populate_doc_weights(self.cvList, self.cvDfs, len(self.cvList))
+      self.cvDfs = manual_tfidf.populate_containing_dictionary(self.cvList)
+      self.cvWeights = cv_comparer.populate_doc_weights(self.cvList, self.cvDfs, len(self.cvList))
 
     def getBlob(self, inds):
       return concat([self.cvList[i] for i in inds])
 
     def getImpWords(self, inds, noWords):
       blob = self.getBlob(inds)
-      vec = getVector(blob, self.cvDfs, len(self.cvList), tp=None)
+      vec = cv_comparer.getVector(blob, self.cvDfs, len(self.cvList), tp=None)
       #print sorted(vec.items(), key=lambda x: x[1], reverse=True)
       return map(lambda x:x[0], sorted(vec.items(), key=lambda x: x[1], reverse=True)[:noWords])
 
@@ -113,7 +124,7 @@ def testImpWords():
   #print '\n----------------------\n'.join(cvs)
   return cvs
 
-#if __name__ == "__main__":
+if __name__ == "__main__":
   """
   cvs = testImpWords()
   x = jobSearch()
@@ -122,5 +133,10 @@ def testImpWords():
   print inds
   print x.getImpWords(inds, 50)
   """
+  j = jobSearch()
+  cv_as_string = j.get_pdf_as_text('MattGaming.pdf')
+  for job_id in j.get_related_jobs(stringy):
+      json_job_information = j.get_json_job_info(job_id)
+      print json_job_information
 #  dicts = [{'abra cada bra':[1,2,3,4,5], 'qui':[3,7,9,10], 'pui':[3,4,5,6,7]},{'lui':[2,3,4,9],'cui':[1,8,5,10]}]
 #  print parseSearch("qui",dicts)
