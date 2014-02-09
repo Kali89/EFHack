@@ -86,7 +86,9 @@ class Token():
 class User():
 
     def __init__(self, profile_dict):
-        print self.parse(profile_dict)
+        self.profile_string = ""
+        self.parse(profile_dict)
+        print self.profile_string
         #print profile_dict
 
     def parse(self, profile):
@@ -101,7 +103,7 @@ class User():
                 self.parse(item)
         else:
             try:
-                return profile.encode('utf-8', 'ignore')
+                self.profile_string += profile.encode('utf-8', 'ignore') + "\n"
             except:
                 pass
 
