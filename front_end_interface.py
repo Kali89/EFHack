@@ -7,6 +7,7 @@ except:
   print "fucking macs"
 import pdfPathToText
 import json
+import lint_job_advert
 import pickle
 #from manual_tfidf import populate_document_dictionary, populate_containing_dictionary
 #from cv_comparer import run_query, populate_doc_weights, best_matches_fast, getVector
@@ -18,7 +19,9 @@ def get_job_by_id(jid):
   as it makes a big ass dictionary
   """
   sql_query = "SELECT * FROM test.job_results WHERE search_id = " + str(jid)
-  return dict((job_id, {'job_id': job_id, 'search_term' : search.decode('utf-8', 'ignore'), 'location_term' : location.decode('utf-8', 'ignore'), 'job_title' : title.decode('utf-8', 'ignore'), 'job_description' : description.decode('utf-8', 'ignore')}) for (job_id, search, location, title, description) in cv_comparer.run_query(sql_query))
+  job_dict = dict((job_id, {'job_id': job_id, 'search_term' : search.decode('utf-8', 'ignore'), 'location_term' : location.decode('utf-8', 'ignore'), 'job_title' : title.decode('utf-8', 'ignore'), 'job_description' : description.decode('utf-8', 'ignore')}) for (job_id, search, location, title, description) in cv_comparer.run_query(sql_query))
+  job_dict['warnings'] = lint_job_advert(job_dict['job_description'])
+  return job_dict
 
 class jobSearch(object):
 
@@ -59,7 +62,7 @@ class jobSearch(object):
 
     def get_pdf_as_text(self, path_to_pdf):
         return pdfPathToText.convert_pdf_to_txt(path_to_pdf)
-    
+
     def readCVs(self, path):
         with open(path, 'r') as f:
             self.bizExp, self.edu, self.job, self.company, self.name, self.email, self.phoneNumber, self.cvCount = pickle.load(f)
