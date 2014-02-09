@@ -18,16 +18,6 @@ class LinkedInHandler():
         self.SECRET = 'zYgn5AyIo7EL1UOz'
         self.RETURN_URL = 'http://localhost:8000'
 
-    def get_user(self):
-        auth_code = self.request_authentication()
-        if auth_code.code is None:
-            return None
-        access_token = self.request_access_token(auth_code)
-        if access_token is None:
-            return None
-        return self.get_profile(access_token)
-
-
     def build_request_string(self):
         """
         Didn't think this could be done with the requests api.  As it involves user input in the browser.
@@ -35,7 +25,9 @@ class LinkedInHandler():
         return "https://www.linkedin.com/uas/oauth2/authorization?response_type=code&client_id=" + self.KEY + "&scope=r_fullprofile&state=1UXrL4PbYPVtYyowFAez&redirect_uri="+self.RETURN_URL
 
     def request_authentication(self):
-        print self.build_request_string()
+        return self.build_request_string()
+
+    def wait_for_auth(self):
         auth_code = Token()
         self._wait_for_user_to_enter_browser(auth_code)
         return auth_code
@@ -134,4 +126,9 @@ class User():
 
 if __name__ == "__main__":
     li = LinkedInHandler()
-    user = User(li.get_user())
+    print li.request_authentication()
+    auth_code = li.wait_for_auth()
+    if auth_code.code is not None:
+        access_token = li.request_access_token(auth_code)
+        if access_token is not None:
+            print li.get_profile(access_token)
