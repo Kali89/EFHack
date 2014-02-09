@@ -8,4 +8,18 @@ def lint_job_description(job_description):
     r = requests.post("http://joblint.org/ws", headers=headers, data=json.dumps(payload))
     return json.loads(r.text)
 
-lint_job_description("Fucking Beer, Tits and XBox Brah!")
+def is_job_description_good(job_description):
+    job_dict = lint_job_description(job_description)
+    for failure, count in job_dict['failPoints'].items():
+        if count > 0:
+            return False
+    for warning in job_dict['warnings']:
+        pass
+        #print warning.items()
+    return True
+
+"""
+print is_job_description_good("Beer and XBox Brah!")
+print "%%%%%%%"
+print is_job_description_good("This is a job")
+"""

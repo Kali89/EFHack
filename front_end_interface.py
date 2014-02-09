@@ -1,12 +1,23 @@
 #!/usr/bin/python
 import re
 import manual_tfidf
-import cv_comparer
+try:
+  import cv_comparer
+except:
+  print "fucking macs"
 import pdfPathToText
 import json
 #from manual_tfidf import populate_document_dictionary, populate_containing_dictionary
 #from cv_comparer import run_query, populate_doc_weights, best_matches_fast, getVector
 #from pdfPathToText import convert_pdf_to_txt
+
+def get_job_by_id(jid):
+  """
+  Method was desired to get a job without instantiating a full jobSearch object
+  as it makes a big ass dictionary
+  """
+  sql_query = "SELECT * FROM test.job_results WHERE search_id = " + str(jid)
+  return dict((job_id, {'job_id': job_id, 'search_term' : search.decode('utf-8', 'ignore'), 'location_term' : location.decode('utf-8', 'ignore'), 'job_title' : title.decode('utf-8', 'ignore'), 'job_description' : description.decode('utf-8', 'ignore')}) for (job_id, search, location, title, description) in cv_comparer.run_query(sql_query))
 
 class jobSearch(object):
 
@@ -43,7 +54,6 @@ class jobSearch(object):
         important_word_freqs = manual_tfidf.run_tfidf(jobs_descriptions)
         important_words = [(word, freq) for (word, freq) in important_word_freqs if word not in cv]
         return important_words
-
 
     def get_pdf_as_text(self, path_to_pdf):
         return pdfPathToText.convert_pdf_to_txt(path_to_pdf)
