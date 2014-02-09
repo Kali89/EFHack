@@ -5,28 +5,71 @@ Using a linkedin api already written.  See above linkedin
 install is via pip: sudo pip install python-linkedin
 
 """
-from linkedin import linkedin
+import BaseHTTPServer
+import cgi
+import requests
+import json
 
-class LinkedInHandler:
+
+class LinkedInHandler():
 
     def __init__(self):
-        self.CONSUMER_KEY = '77o0i7g6tnd1eb'
-        self.CONSUMER_SECRET = 'zYgn5AyIo7EL1UOz'
-        self.USER_TOKEN = 'a18ee3a3-4363-4c77-9d68-ba9161a0e197'
-        self.USER_SECRET = '46a8553c-c694-4943-809e-e22f75fbb189'
+        self.KEY = '77o0i7g6tnd1eb'
+        self.SECRET = 'zYgn5AyIo7EL1UOz'
         self.RETURN_URL = 'http://localhost:8000'
 
-    def request_authentication(self):
-        authentication = linkedin.LinkedInDeveloperAuthentication(self.CONSUMER_KEY, self.CONSUMER_SECRET, self.USER_TOKEN, self.USER_SECRET, self.RETURN_URL, ['r_fullprofile'])
-        application = linkedin.LinkedInApplication(authentication)
-        return application
+    def get_user(self):
+        auth_code = self.request_authentication()
+        access_token = self.request_access_token(auth_code)
+        return self.get_profile(access_token)
 
-    def get_information(self, user):
-        interesting_fields = ['first-name', 'last-name', 'location', 'interests', 'languages', 'skills', 'educations','three_current_positions', 'three_past_positions', 'recommendations-received']
-        return user.get_profile(selectors=interesting_fields)
+    def build_request_string(self):
+        return "https://www.linkedin.com/uas/oauth2/authorization?response_type=code&client_id=" + self.KEY + "&scope=r_fullprofile&state=1UXrL4PbYPVtYyowFAez&redirect_uri="+self.RETURN_URL
+
+    def request_authentication(self):
+        print self.build_request_string()
+        auth_code = Token()
+        self._wait_for_user_to_enter_browser(auth_code)
+        return auth_code
+
+
+    def get_profile(self, access_token):
+        url = "https://api.linkedin.com/v1/people/~:(first-name,last-name,location,interests,languages,skills,educations,three_current_positions,three_past_positions,recommendations-received)?format=json"
+        #url = "https://api.linkedin.com/v1/people/~:(skills)"
+        payload = {'oauth2_access_token':access_token}
+        r = requests.get(url, params=payload)
+        return json.loads(r.text.encode('utf-8'))
+
+    def request_access_token(self, auth_code):
+        url = "https://www.linkedin.com/uas/oauth2/accessToken?grant_type=authorization_code"
+        payload = {'code':auth_code.code, 'redirect_uri':self.RETURN_URL, 'client_id':self.KEY, 'client_secret':self.SECRET}
+        r = requests.post(url, params=payload)
+        return json.loads(r.text)['access_token']
+
+    def _wait_for_user_to_enter_browser(self, auth_code):
+        class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
+            def do_GET(self):
+                p = self.path.split('?')
+                if len(p) > 1:
+                    params = cgi.parse_qs(p[1], True, True)
+                    auth_code.set_token(params['code'][0])
+
+        server_address = ('', 8000)
+        httpd = BaseHTTPServer.HTTPServer(server_address, MyHandler)
+        httpd.handle_request()
+
+class Token():
+
+    def __init__(self):
+        self.code = None
+
+    def set_token(self, token):
+        self.code = token
+
+    def __str__(self):
+        return self.code
+
 
 if __name__ == "__main__":
     li = LinkedInHandler()
-    user_profile = li.request_authentication()
-    info_dict = li.get_information(user_profile).items()
-    print info_dict
+    print li.get_user()
