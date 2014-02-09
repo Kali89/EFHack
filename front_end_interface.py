@@ -68,9 +68,9 @@ class jobSearch(object):
     def getImpWords(self, cv, inds):
       blob = self.getBlob(inds)
       vec = cv_comparer.getVector(blob, self.df_dictionary, len(self.job_description_list), tp=None)
-      #print sorted(vec.items(), key=lambda x: x[1], reverse=True)
+#      print sorted(vec.items(), key=lambda x: x[1], reverse=True)
       scv = set(cv)
-      return [r[0] for r in sorted(vec.items(), key=lambda x: x[1], reverse=True) if r not in scv] 
+      return [r[0] for r in sorted(vec.items(), key=lambda x: x[1], reverse=True) if r[0] not in scv] 
 
     def get_pdf_as_text(self, path_to_pdf):
         return pdfPathToText.convert_pdf_to_txt(path_to_pdf)
@@ -202,8 +202,9 @@ if __name__ == "__main__":
   print inds
   print x.getImpWords(inds, 50)
   """
-  j = cvSearch()
-  print j.getImpWords("derivatives",50)
+  j = jobSearch()
+  indices = j.get_related_jobs("Python Ruby Django")
+  j.getImpWords("Python Ruby Django", indices)
 #  for job_id in j.getRelCVs("trader"):
 #      y = j.cv_returner(int(job_id))
 #      print y[job_id]['job']
